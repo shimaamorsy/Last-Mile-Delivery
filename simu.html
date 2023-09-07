@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders</title>
+    <!-- Compiled and minified CSS -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="simu.css">
+    <style>
+        #register {
+            color: #D8A533;
+            line-height: 50%;
+            font-weight: 700;
+            margin: 0%;
+        }
+
+        [type="radio"]:not(:checked),
+        [type="radio"]:checked {
+            opacity: 0;
+        }
+
+        select {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <body>
+        <div class="container">
+            <div class="row">
+                <img src="vector.PNG" width=100px class="col s2 l1 m1 ">
+            </div>
+
+            <div class="row">
+                <h4 class="col l3 m2 s1 " id="register">Register</h4>
+            </div>
+
+            <form action="map.html">
+                <div class="row">
+                    <div class="col l5 m5 s6 row">
+                        <h5 class="col l5 m5 s2 ">Country</h5>
+                        <select class="a" id="Country_" onblur="Country(this.value)"></select>
+                        <!-- <option value="0" disabled selected hidden>Choose a country </option>
+                    <option value="0" disabled selected hidden>Lol </option> -->
+                        </select>
+                        <p class="CountryCityError" id="CountryError">Select a Country</p>
+                    </div>
+                    <div class="col l5 m5 s6 offset-l2 offset-m2 ">
+                        <h5 class="col l5 m5 s2 ">City</h5>
+                        <select class="a" id="City_" onblur="City()">
+                            <!-- <option value="0" disabled selected hidden>Choose a city </option> -->
+                        </select>
+                        <p class="CountryCityError" id="CityError">Select a City</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col l5 m5 s12 row">
+                        <p class="col l6 m6 s8"><b>Number Of Stores</b></p>
+                        <!-- <input type="number" id="selS" placeholder="0" value="0" onkeyup="NumberOfStores()"
+                        class="col s3 offset-s2 PM in10 "> -->
+                        <div class="col l4 offset-l2 m3 offset-m3 s4 PM" id="selS" placeholder="0" value="0"
+                            onkeyup="NumberOfStores()">
+                            <div class="tora minus" onclick="minusStores()">-</div>
+                            <div class="tora number" id="NumberOfStores">0</div>
+                            <div class="tora plus" onclick="plusStores()">+</div>
+                        </div>
+                    </div>
+
+                    <div class="col l5 offset-l2 m5 offset-m2 s12">
+                        <p class="col l6 m6 s8"><b>Number Of Vehicles</b></p>
+                        <!-- <input type="number" class="col s2 offset-s3 PM in10" id="selV" placeholder="0" value="0"
+                        onblur="NumberOfVehicles()"> -->
+                        <div class="col l3 offset-l3 m3 offset-m3 s4 PM" id="selV" placeholder="0" value="0"
+                            onblur="NumberOfVehicles()">
+                            <div class="tora minus" onclick="minusVehicles()">-</div>
+                            <div class="tora number" id="NumberOfVehicles">0</div>
+                            <div class="tora plus" onclick="plusVehicles()"">+</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class=" row" id="information">
+                                <fieldset id="basicFieldset" style="display: none;">
+                                    <legend> Info about vehicle()</legend>
+                                    <div class="row">
+                                        <div class=" col s5 ">
+                                            <h6 class="h44">Type :</h6>
+                                            <select class="a">
+                                                <option>Private Car</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col s5 offset-s1">
+                                            <h6 class="h44">Capacity :</h6>
+                                            <select class="a">
+                                                <option>1</option>
+                                                <option>2</option>
+                                                <option>3</option>
+                                                <option>4</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <p class="col s6 ">Does the vehicles accept fridge?</p>
+                                        <p class="col s5 m5 l5 row">
+                                            <label class="col s1">
+                                                <input type="radio" class="with-gap yes " name="HasFridge" value="YES"
+                                                    checked style="accent-color: green;" />
+                                                <span class="offset-s1 " style="color:green"><b>Yes</b></span>
+                                            </label>
+                                            <label class="col s1 offset-s3">
+                                                <input type="radio" class="with-gap no" name="HasFridge" value="No"
+                                                    style="accent-color:red;" />
+                                                <span class="" style="color:red"><b>No</b></span>
+                                            </label>
+                                        </p>
+                                    </div>
+
+                                    <div class=" row">
+                                        <h6 class="col s6 ">Capacity of the fridge</h6>
+                                        <input type="number" placeholder="250" class="col s6">
+                                    </div>
+                                </fieldset>
+                            </div>
+
+                            <h6 id="HelloError" style="display: none;color:red">"Please, Enter all required information
+                                for
+                                above cars"
+                            </h6>
+                            <div>
+                                <button id="btn_scroll">Up</button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <center class="row" id="startSimulation" style="display: none;">
+                    <!-- <div class="col l10 m10 s10 offset-l1 offset-m1 offset-s1"> -->
+                    <button id="start" class="btn waves-effect waves-light" type="submit" name="action">Submit
+                        <i class="material-icons right">send</i>
+                    </button>
+                    <!-- </div> -->
+                </center>
+
+            </form>
+            <script src="simu.js"></script>
+            <!-- Compiled and minified JavaScript -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    </body>
+
+</html>
