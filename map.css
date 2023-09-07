@@ -1,0 +1,45 @@
+#map {
+height:80%;
+}
+
+html,
+body {
+height: 100%;
+margin: 0;
+padding: 0;
+}
+
+h2{
+    text-align: center;
+}
+
+.ff{
+    font-size: medium;
+    font-weight: normal;
+    display: inline-block;
+    color:#D8A533;
+    padding-left: 8px;
+}
+
+.DivObj{
+    border: 2px solid #509958;
+    padding: 5px;
+    margin: 10px;
+}
+.all
+{
+margin: 10px;
+}
+
+.head
+{
+    color:#509958;
+    text-align: center;
+    font-weight: bold;
+}
+.text
+{
+    color:#509958;
+    padding: 5px;
+    font-style: italic;
+}
