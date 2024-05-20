@@ -1,6 +1,6 @@
 # Last Mile Delivery System
 
-Welcome to the Last Mile Delivery System! This system is designed to optimize the last mile delivery process, ensuring efficient and timely delivery of goods to customers.
+ Developed a prototype and simulation addressing the complex challenges of the ’Last Mile Delivery’ problem.
 
 ## Features
 
@@ -10,12 +10,13 @@ Welcome to the Last Mile Delivery System! This system is designed to optimize th
 - Notify customers about delivery status
 
 ## Technologies Used
-
-- Python
-- Django
 - PostgreSQL
 - HTML/CSS
 - JavaScript
+- Materialize Framework
+- API integration
+- JSON manipulation
+-  utilization of the Google Maps SDK
 
 ## Installation
 
@@ -25,29 +26,16 @@ Welcome to the Last Mile Delivery System! This system is designed to optimize th
     git clone https://github.com/shimaamorsy/Last-Mile-Delivery.git
     ```
 
-2. Install dependencies:
-
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-3. Run migrations:
-
-    ```bash
-    python manage.py migrate
-    ```
-
 4. Start the development server:
 
     ```bash
-    python manage.py runserver
+    run index.html with live server
     ```
 
 ## Usage
 
 1. Visit [http://localhost:8000](http://localhost:8000) in your web browser.
-2. Sign in to access the dashboard.
-3. Use the dashboard to manage deliveries, track delivery status, and optimize routes.
+2. Use the dashboard to manage deliveries, track delivery status, and optimize routes.
 
 ## Contributing
 
