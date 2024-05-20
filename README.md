@@ -1,21 +1,58 @@
-Last_Mile_Delivery_Simulation
-This project, which was upgraded from a simulation project, uses the google map API to provide routes between vehicles and stores and homes that will deliver orders in real-time. Users will enter number of stores and vehicles,capacity that vehicles can carry country and city that stores in then the application will show you map you should enter number of orders to can see markers on map When you mouse over a marker, her details will appear. When you click a store, a route will be drawn from her to a vehicle that will take her orders, and when you click it again, the route will be removed. The same is true for vehicles that will draw a route from her to homes where their orders will be delivered. .
+# Last Mile Delivery System
 
-Features
-Interactive Map Interface: the project offers an interactive map interface for easy visualization and interaction. Click-Based Selection: Users can simply click on the map to see routes.
+Welcome to the Last Mile Delivery System! This system is designed to optimize the last mile delivery process, ensuring efficient and timely delivery of goods to customers.
 
-Installation
-1-Clone the repository
+## Features
 
-2-Obtain an key from Google Maps Platform Developer Get an API key.
+- Track deliveries in real-time
+- Optimize delivery routes
+- Schedule deliveries efficiently
+- Notify customers about delivery status
 
-3-replace YOUR_API_KEY with your actual your API key.
+## Technologies Used
 
-4-Run it
+- Python
+- Django
+- PostgreSQL
+- HTML/CSS
+- JavaScript
 
-Resources
-Google Maps Platform Documentation for Find a route and directions Learn more in this tutorial
+## Installation
 
-##Website Explainer Video
+1. Clone the repository:
 
-Watch the video
+    ```bash
+    git clone https://github.com/shimaamorsy/Last-Mile-Delivery.git
+    ```
+
+2. Install dependencies:
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+3. Run migrations:
+
+    ```bash
+    python manage.py migrate
+    ```
+
+4. Start the development server:
+
+    ```bash
+    python manage.py runserver
+    ```
+
+## Usage
+
+1. Visit [http://localhost:8000](http://localhost:8000) in your web browser.
+2. Sign in to access the dashboard.
+3. Use the dashboard to manage deliveries, track delivery status, and optimize routes.
+
+## Contributing
+
+Contributions are welcome! Please fork the repository and submit a pull request with your changes.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
