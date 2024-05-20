@@ -1,40 +1,100 @@
 let map;
+let marker;
+let geocoder;
+
+let NumberOfStores=JSON.parse(sessionStorage.NumberOfStores);
+let NumberOfVehicles=JSON.parse(sessionStorage.NumberOfVehicles);
+let Country=JSON.parse(sessionStorage.Country);
+let City=JSON.parse(sessionStorage.City);
+let Cars=JSON.parse(sessionStorage.Cars);
+
+let Latitude;
+let longitude;
+
+let wayPoints=[];
+let wayPointsStores=[];
+let wayPointsVehicles=[];
+
+async function toggleBounce() {
+    if (marker.getAnimation() !== null) {
+        marker.setAnimation(null);
+    } else {
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+    }
+}
+function geocode(request) {
+geocoder
+    .geocode(request)
+    .then((result) => {
+    const { results } = result;
+    let lat=results[0].geometry.location.lat();
+    let lng=results[0].geometry.location.lng();
+
+    console.log(results);
+
+    sessionStorage.setItem("Latitude",JSON.stringify(lat));
+    sessionStorage.setItem("longitude",JSON.stringify(lng));
+
+    map.setCenter(results[0].geometry.location);
+    map.setZoom(10);
+    return 0;
+    })
+}
+
 async function initMap() {
 const { Map } = await google.maps.importLibrary("maps");
+const {TravelMode} = await google.maps.importLibrary("routes");
 map = new Map(document.getElementById("map"), {
 center: { lat: 27.1833, lng:31.1667 },
-zoom:12,
+zoom:3,
+mapTypeControl: false,
 });
+
+geocoder =await (new google.maps.Geocoder());
+geocode({ address: City});
+
+//console.log(JSON.parse(sessionStorage.Latitude),JSON.parse(sessionStorage.longitude),"LLLLLLLLLLLLLLLL");
+//console.log(JSON.parse(sessionStorage.latv),JSON.parse(sessionStorage.lngv),"MMMMMMMMMMMMMMMMMMMMM");
+
 arrData.forEach(function(item){
     let marker;
-    let latlng=getPoint(27.183,31.167);
+    //console.log(JSON.parse(sessionStorage.Latitude),JSON.parse(sessionStorage.longitude),"LLLLLLLLLLLLLLLL");
+    let latlng=getPoint(JSON.parse(sessionStorage.Latitude),JSON.parse(sessionStorage.longitude));
+    //console.log(latlng,"***");
+    //console.log(longitude,"&&");
     let infowindow;
-
     let image ;
     
     if(item.Type=="Motorcycle")
     {
-        //console.log("HI");
+        item["latlng"]=latlng;
         image="https://img.icons8.com/emoji/96/000000/motorcycle-emoji.png";
     }
 
     else if (item.Type=="Large Car")
     {
+        item["latlng"]=latlng;
         image="https://img.icons8.com/color/48/suv.png"
     }
 
     else if (item.Type=="Private Car")
     {
-    image ="https://img.icons8.com/doodle/48/old-car.png";
+        item["latlng"]=latlng;
+        image ="https://img.icons8.com/doodle/48/old-car.png";
     }
 
     else 
     {
-    image="https://img.icons8.com/clouds/100/small-business.png";
+        image="https://img.icons8.com/clouds/100/small-business.png";
     }
 
     if(item.Type=="Store")
     {
+        //wayPointsStores.push(latlng);
+        wayPoints.push(latlng);
+
+        item["latlng"]=latlng;
+        //console.log(item["latlng"]);
         let AllDivs=document.createElement("div");
         item.vehicles.forEach(function(veh)
         {
@@ -75,8 +135,9 @@ arrData.forEach(function(item){
             title:item.Name,
             map:map,
             icon:image,
+            animation: google.maps.Animation.DROP,
         })
-
+        //marker.addListener("click", toggleBounce);
         infowindow = new google.maps.InfoWindow({
             content: `<div class="all">
             <div> <img src="${image}"></div>
@@ -211,69 +272,68 @@ arrData.forEach(function(item){
         infowindow.open(map,marker);
     });
 });
+
+//console.log(arrData);
+let waypts = [];
+for(let vehicle=NumberOfStores;vehicle<(NumberOfStores+NumberOfVehicles);vehicle++)
+{
+    var directionsService = new google.maps.DirectionsService();
+    var directionsRenderer = new google.maps.DirectionsRenderer({
+        map: map
+    });
+    directionsRenderer.setMap(map);
+    let vehicleObj=arrData[vehicle];
+    let storesOfVObj=vehicleObj.stores;
+    //console.log(storesOfVObj);
+    storesOfVObj.forEach(function(item){
+        for(let store=0;store<NumberOfStores;store++)
+        {
+            let storeName=arrData[store].Name;
+            if(item.Name==storeName)
+            {
+                item["latlng"]=arrData[store].latlng;
+            }
+        }
+    });
+    waypts=[];
+    var travelModes = [
+        google.maps.TravelMode.DRIVING,
+        google.maps.TravelMode.WALKING,
+        google.maps.TravelMode.BICYCLING
+    ];
+    for (let i = 0; i < storesOfVObj.length-1; i++) {
+        console.log(storesOfVObj[i].Name);
+        waypts.push({
+            location: storesOfVObj[i].latlng,
+            stopover: true,
+        });
+    }
+    calculateAndDisplayRoute(directionsService, directionsRenderer,vehicleObj,storesOfVObj[storesOfVObj.length-1],waypts,travelModes)
 }
-
-
-let NumberOfStores=JSON.parse(sessionStorage.NumberOfStores);
-let NumberOfVehicles=JSON.parse(sessionStorage.NumberOfVehicles);
-let Country=JSON.parse(sessionStorage.Country);
-let City=JSON.parse(sessionStorage.City);
-let Cars=JSON.parse(sessionStorage.Cars);
-//console.log(NumberOfStores,NumberOfVehicles,Country,City,Cars[0]);
+console.log(arrData);
+}
 let arrData=[];
 StoresVehiclesData();
-function getPoint(lat,lng)
+function getPoint(Lati,long)
 {
     let radius=.05;
-    let min_X=lat-radius;
-    let max_X=lat+radius;
+    let min_X=Lati-radius;
+    let max_X=Lati+radius;
 
-    let min_Y=lng-radius;
-    let max_Y=lng+radius;
+    let min_Y=long-radius;
+    let max_Y=long+radius;
 
     let x,y;
     
     let r=0;
-    while(r<1000) {
+    while(r<100) {
     x =Math.random()*((max_X-min_X)+.1) + min_X;
     y=Math.random()*((max_Y-min_Y)+.1) + min_Y;;
     
-    if(Math.pow((x-lat),2) + Math.pow((y-lng),2) <= Math.pow(radius,2))
+    if(Math.pow((x-Lati),2) + Math.pow((y-long),2) <= Math.pow(radius,2))
     {
     return {lat:x,lng:y};
     break;
-    }
-    r++;
-    }
-}
-function get()
-{
-    let lat=27.1833;
-    let lng=31.1667;
-    let radius=5;
-
-    let min_X=lat-radius;
-    let max_X=lat+radius;
-
-    let min_Y=lng-radius;
-    let max_Y=lng+radius;
-
-    let x,y;
-    //console.log(x,y);
-    /*Math. floor(Math. random() * ((max-min)+1) + min); 
-    Generate a random integer between two numbers min and max (the min is inclusive, and the max is exclusive). */
-    let r=0;
-    while(r<10) {
-    x =Math.random()*((max_X-min_X)+.01) + min_X;
-    y=Math.random()*((max_Y-min_Y)+.01) + min_Y;;
-    //console.log(x,y);
-    //console.log(Math.pow((x-lat),2),Math.pow((y-lng),2),Math.pow(radius,2));
-    console.log(x,y,"hELLO");
-    if(Math.pow((x-lat),2) + Math.pow((y-lng),2) <= Math.pow(radius,5))
-    {
-        //console.log(Math.pow((x-lat),2),Math.pow((y-lng),2),Math.pow(radius,2));
-        console.log(x,y,"Done");
-        console.log("***********************");
     }
     r++;
     }
@@ -295,6 +355,7 @@ for(let i=0;i<NumberOfStores;i++)
     let obj={
         Name:`Store ${i+1}`,
         Type:"Store",
+        latlng:wayPointsStores[i],
         vehicles:[],
         "Total Orders":Math.floor(randomValue),
 
@@ -354,6 +415,7 @@ function getRandomValueBetween(min,max)
 function StoreToVehicles()
 {
     //let SessionArray=JSON.parse(sessionStorage.SessionArray);
+    //console.log(JSON.parse(sessionStorage.City));
     for(let store=0;store<NumberOfStores;store++)
     {
         let storeObj=arrData[store];
@@ -437,4 +499,24 @@ function StoreToVehicles()
     // sessionStorage.arrData=JSON.stringify(arrData);
   //  PutStoresAndVehiclesOnMap();
 }
+function calculateAndDisplayRoute(directionsService, directionsRenderer,start,end,waypts) {
+    console.log(start,end,waypts);
+    var travelModes = ["DRIVING", "WALKING", "BICYCLING", "TRANSIT"];
+    if(end)
+    {
+directionsService
+    .route({
+    origin: start.latlng,
+    destination:end.latlng,
+    waypoints: waypts,
+    optimizeWaypoints: true,
+    travelMode:  google.maps.TravelMode.DRIVING, 
+    })
+    .then((response) => {
+    directionsRenderer.setDirections(response);
+    })
+}
+}
+
 initMap();
+
